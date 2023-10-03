@@ -1,16 +1,26 @@
-// @jsxImportSource next/client
-/* use client */
-import { useState } from "react"
+"use client"
+
+import { useState, useRef } from "react"
 import TodoList from "./TodoList"
 
 export default function Home() {
-  const [todos, useTodos] = useState({ id: 1, name: 'test', completed: false })
+  const [todos, setTodos] = useState([{ id: 1, name: 'test', completed: false }])
+
+  const todoNameRef = useRef();
+
+  const addTodo = () => {
+    const name = todoNameRef.current.value;
+    setTodos((prevTodos) => {
+      return [...prevTodos, {id:name, name: name, completed: false}]
+    })
+    todoNameRef.current.value = null;
+  }
 
   return <>
     <TodoList todos={todos} />
-    <input className="bg-slate-950 text-white rounded-lg" />
-    <button>TODO追加</button>
-    <button>clear</button>
-    <div>合計：</div>
+    <input tyep="text" className="bg-slate-950 text-white rounded-lg" ref={todoNameRef} />
+    <button onClick={addTodo}>タスクを追加</button>
+    <button>完了したタスクの削除</button>
+    <div>残りのタスク</div>
   </>
 }
